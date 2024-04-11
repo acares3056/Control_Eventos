@@ -1,0 +1,16 @@
+body {
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.card-body {
+  padding: 20px;
+}
