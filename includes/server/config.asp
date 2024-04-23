@@ -4,6 +4,10 @@ Sub DisableCache()
     Response.CacheControl = "no-cache"
     Response.AddHeader "Pragma", "no-cache"
     Response.Expires = -1
+
+    Response.CharSet = "UTF-8"
+    Response.CodePage = 65001
+    
 End Sub
 
 Function Sanitize(input)
