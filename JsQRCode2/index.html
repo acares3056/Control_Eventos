@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <style>
+        #video {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+        }
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+    <video id="video" playsinline></video>
+    <div id="output"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.19.0"></script>
+    <script>
+        const video = document.getElementById('video');
+        const output = document.getElementById('output');
+
+        // Función para iniciar la captura de la cámara y la detección de QR
+        function startScanner() {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                    readQRCode();
+                })
+                .catch(function(err) {
+                    console.error('Error accessing camera: ', err);
+                    output.textContent = 'Error accessing camera. Please allow camera access and try again.';
+                });
+        }
+
+        // Función para detener la captura de la cámara
+        function stopScanner() {
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+
+            video.srcObject = null;
+        }
+
+        // Función para leer el código QR
+        function readQRCode() {
+            const codeReader = new ZXing.BrowserQRCodeReader();
+            codeReader.decodeFromVideoDevice(undefined, 'video', (result, err) => {
+                if (result) {
+                    output.textContent = 'QR Code Detected: ' + result.text;
+                    // Aquí puedes almacenar el contenido del código QR como desees
+                    // Por ejemplo, enviarlo a un servidor, almacenarlo localmente, etc.
+                } else {
+                    console.error('Error decoding QR code: ', err);
+                    output.textContent = 'Error decoding QR code. Please try again.';
+                }
+            });
+        }
+
+        // Iniciar la captura de la cámara cuando la página esté completamente cargada
+        window.addEventListener('load', startScanner);
+
+        // Detener la captura de la cámara cuando se salga de la página
+        window.addEventListener('unload', stopScanner);
+    </script>
+</body>
+</html>

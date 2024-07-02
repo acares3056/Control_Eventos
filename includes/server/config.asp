@@ -22,6 +22,15 @@ Function Sanitize(input)
 End Function
 
 
+Function cleanError(txtMensaje)
+    ' Función para sanitizar el input y prevenir inyección de SQL
+    
+    txtMensaje = Replace( txtMensaje, "[Microsoft][ODBC SQL Server Driver][SQL Server]", "") ' Escapar comillas simples
+    
+    cleanError = txtMensaje
+End Function
+
+
 Function validaEntrada(str)
     Dim sqlCheck
     sqlCheck = False

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarjetas con Enlaces</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Estilos personalizados -->
+  <style>
+    body {
+      background-image: url('https://source.unsplash.com/random/?access'); /* Imagen de fondo para la página */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    .card-custom {
+      background: rgba(255, 255, 255, 0.5); /* Fondo blanco transparente para las tarjetas */
+      color: #000;
+    }
+    .card-custom a {
+      color: #000;
+      text-decoration: none;
+    }
+    .card-custom a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Tarjeta 1 -->
+      <div class="col-md-6">
+        <div class="card card-custom">
+          <div class="card-body">
+            <h5 class="card-title">DashBoard</h5>
+            <p class="card-text">Permite ver el status de como van la recepciones de los eventos.</p>
+            <a href="DashBoard/default.asp" class="btn btn-primary">Ir al enlace</a>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 2 -->
+      <div class="col-md-6">
+        <div class="card card-custom">
+          <div class="card-body">
+            <h5 class="card-title">Formulario Registro</h5>
+            <p class="card-text">Permite realizar el registro de los participantes.</p>
+            <a href="Registro/default.asp" class="btn btn-primary">Ir al enlace</a>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 3 -->
+      <div class="col-md-6">
+        <div class="card card-custom">
+          <div class="card-body">
+            <h5 class="card-title">Entrega a Inscritos</h5>
+            <p class="card-text">Mediante el codigo QR generado que se entregara al momento de registrarse, podran obtener sus accesorios.</p>
+            <a href="EntregaInscritos/default.asp" class="btn btn-primary">Ir al enlace</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
