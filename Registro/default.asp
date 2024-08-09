@@ -61,10 +61,14 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #007bff;
+            background-color: #949599;
         }
         .nav-tabs .nav-link.active {
-            background-color: #007bff;
+            background-color: #ED3529;
+            color: white;
+        }
+        .nav-tabs .nav-link.visited  {
+            background-color: #ED3529;
             color: white;
         }
 
@@ -74,25 +78,52 @@
             padding: 20px;
             margin: 20px auto; 
         }
+
+        .tab-content-personal{
+            background-color: #8fce00;
+            border-radius: 0px;
+        }
+
+        .card-personal{
+            background-color: #5c7c12;
+            border-radius: 20px;
+        }
+
+         
+        .btn-primary {
+            color: #fff;
+            background-color: #5c7c12;
+            border-color: #5c7c12;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #5c7c12;
+            border-color: #fff;
+        }
+
+
     </style>
 </head>
 <body>
     <form id="frmRegistro" name="frmRegistro" method="post" action="procesar_formulario.asp">
         <div class="container mt-5 contenedor-personalida">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header card-personal">
                     <h4>Formulario de Inscripción</h4>
                 </div>
-                <div class="card-body">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="info-personal-tab" data-toggle="tab" href="#info-personal" role="tab" aria-controls="info-personal" aria-selected="true">Información Personal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="cualidades-fisicas-tab" data-toggle="tab" href="#cualidades-fisicas" role="tab" aria-controls="cualidades-fisicas" aria-selected="false">Cualidades Físicas</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
+                <div class="card-body tab-content-personal">
+                    <!--
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="info-personal-tab" data-toggle="tab" href="#info-personal" role="tab" aria-controls="info-personal" aria-selected="true">Información Personal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cualidades-fisicas-tab" data-toggle="tab" href="#cualidades-fisicas" role="tab" aria-controls="cualidades-fisicas" aria-selected="false">Cualidades Físicas</a>
+                            </li>
+                        </ul> 
+                    -->
+                    <div class="tab-content " id="myTabContent">
                         <!-- Información Personal -->
                         <div class="tab-pane fade show active" id="info-personal" role="tabpanel" aria-labelledby="info-personal-tab">
                                 <div class="row justify-content-start">
@@ -114,7 +145,7 @@
                                     </div>
                                     <div class="form-group mt-3 col-md-6">
                                         <label for="numero_documento">Nro. documento:</label>
-                                        <input type="text" class="form-control" id="numero_documento" name="numero_documento" size='8' maxlength='8' required>
+                                        <input type="text" class="form-control" id="numero_documento" name="numero_documento" size='20' maxlength='20' required oninput="checkRut(this)" >
                                     </div>
                                 </div>
                                 
@@ -183,20 +214,11 @@
                                         </div>
                                     </div>
                                 </div>
-                        </div>
-                        <!-- Cualidades Físicas -->
-                        <div class="tab-pane fade" id="cualidades-fisicas" role="tabpanel" aria-labelledby="cualidades-fisicas-tab">
-                            <form method="post" action="procesar_formulario.asp">
-                                <div class="form-group mt-3">
-                                    <label for="altura">Altura:</label>
-                                    <input type="text" class="form-control" id="altura" name="altura" required>
-                                </div>
-                            
-                            </form>
+                         
                         </div>
                     </div>
                     <!-- Botón de Envío -->
-                    <button type="submit" class="btn btn-primary mt-3">Registrarse</button>
+                    <button type="submit" class="btn btn-primary mt-3 btn-registro-personalizada" >Registrarse</button>
                 </div>
             </div>
         </div>
@@ -208,43 +230,44 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <script src="../includes/client/valida_rut.js"></script>
+
     <script>
 
         $(document).ready(function() {
             $('#frmRegistro').on('submit', function(e) {
                 e.preventDefault(); // Evita el envío tradicional del formulario
-alert ( 1 );
                 $.ajax({
                     type: 'POST',
                     url: 'registrar.asp', // La URL del script ASP que procesará el formulario
                     data: $(this).serialize(), // Serializa los datos del formulario
                     success: function(response) {
                         var aData = response.split("@");
-                        var MensajeError = "";
+                        var MensajeError = aData[1];
                         if ( aData[0] == "N" )
                         {
-                            MensajeError = "Has quedado registrado, pronto te llegara un correo electronico como tu respaldo.";
+                            xIcon = "success";
                         }
                         else{
-                            MensajeError = aData[1];
+                            xIcon = "error";
+                        }
 
-                        }
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: MensajeError,
-                                showConfirmButton: false,
-                                timer: 2500
-                            });
-                        }
+                        Swal.fire({
+                            position: "top-end",
+                            icon: xIcon,
+                            title: MensajeError,
+                            showConfirmButton: true,
+                            position: 'center' //,timer: 3000
+                        });
+
                     },
                     error: function() {
                         Swal.fire({
-                                position: "top-end",
-                                icon: "success",
+                                position: "center",
+                                icon: error,
                                 title: "Hubo un error al enviar el formulario.",
                                 showConfirmButton: false,
-                                timer: 2500
+                                timer: 3000
                             });
                     }
                 });

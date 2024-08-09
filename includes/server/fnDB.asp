@@ -23,4 +23,12 @@ function CerraConnDB( objConn )
 
 end function
 
+function clearError( valor )
+
+	valor = replace( valor, "[Microsoft][ODBC SQL Server Driver][SQL Server]", "")
+
+	clearError = replace ( valor, "'", "")
+	
+end function
+
 %>

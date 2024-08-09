@@ -1,68 +1,65 @@
 <%
 
-Const cdoSendUsingPickup = 1
-Const cdoSendUsingPort = 2
-Const cdoSendUsingExchange = 3
+  CONST SMTPSendUsing = 2 ' Send using Port (SMTP over the network)
+  CONST SMTPServer = "scanid.cl"
+  CONST SMTPServerPort = 465
+  CONST SMTPConnectionTimeout = 10 'seconds
+  CONST SMTPUser = "contacto@scanid.cl"
+  CONST SMTPPassword = "-.Contacto2024.-"
 
-Const cdoAnonymous = 0
-Const cdoBasic = 1
-Const cdoNTLM = 2
 
-'Sends an email To aTo email address, with Subject And TextBody.
-'The email is In text format.
-'Lets you specify BCC adresses, Attachments, smtp server And Sender email address
-Function SendMailByCDO(aTo, Subject, TextBody, BCC, Files, smtp, aFrom )
-  on error resume Next
+Function Enviar_correo( Para, Asunto, Cuerpo, Desde, Archivo )
 
-  Dim Message 'As New CDO.Message '(New - For VBA)
+  dim sSubject, sEmail, sMailBody, sFrom, sReadReceipt, sMsg
+  sSubject = Asunto
+  sEmail = Para
+  sMailBody = Cuerpo
+  sFrom = Desde
+  sReadReceipt = true
+  sMsg = ""
+
+  'On Error Resume Next
+
+  dim oMail, oConfig, oConfigFields
+  set oMail = Server.CreateObject("CDO.Message")
+  set oConfig = Server.CreateObject("CDO.Configuration")
+  set oConfigFields = oConfig.Fields
+
+  with oConfigFields
+      .Item("http://schemas.microsoft.com/cdo/configuration/sendusing") = SMTPSendUsing
+      .Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = SMTPServer
+      .Item("http://schemas.microsoft.com/cdo/configuration/smtpserverport") = SMTPServerPort
+      .Item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = 1
+      .Item("http://schemas.microsoft.com/cdo/configuration/sendusername") = SMTPUser
+      .Item("http://schemas.microsoft.com/cdo/configuration/sendpassword") = SMTPPassword
+      .Item("http://schemas.microsoft.com/cdo/configuration/sendtls") = True
+      .Item("http://schemas.microsoft.com/cdo/configuration/smtpusessl") = True
+      .Update
+  end with
+
+  oMail.Configuration = oConfig
+
+  oMail.Subject = sSubject
+  oMail.From = sFrom
+  oMail.To = sEmail
+  oMail.HTMLBody = sMailBody
+
+  if len(trim(Archivo)) > 0 then 
+    oMail.AddAttachment Archivo
+  end if
+
+  oMail.Send
+  set oMail=nothing
+
+  sMsg = "Message Sent"
+
+  if Err.Number > 0 then sMsg = "ERROR: " & Err.Description
+
+  Enviar_correo = sMsg
   
-  'Create CDO message object
-  Set Message = CreateObject("CDO.Message")
-
-  'Set configuration fields. 
-  With Message.Configuration.Fields
-    'Original sender email address 
-    .Item("http://schemas.microsoft.com/cdo/configuration/sendemailaddress") = aFrom
-
-    'SMTP settings - without authentication, using standard port 25 on host smtp
-    .Item("http://schemas.microsoft.com/cdo/configuration/sendusing") = cdoSendUsingPort
-    .Item("http://schemas.microsoft.com/cdo/configuration/smtpserverport") = 25
-    .Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = smtp
-
-    .Item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = cdoBasic
-    .Item("http://schemas.microsoft.com/cdo/configuration/sendusername") = "contacto@scanid.cl"
-    .Item("http://schemas.microsoft.com/cdo/configuration/sendpassword") = "-.Contacto2024.-"
-    '.Item("http://schemas.microsoft.com/cdo/configuration/smtpusessl") = True/False
-
-    'SMTP Authentication
-    .Item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = cdoAnonymous
-
-    .Update
-  End With
-
-  'Set other message fields.
-  With Message
-    'From, To, Subject And Body are required.
-    .From = aFrom
-    .To = aTo
-    .Subject = Subject
-
-    'Set TextBody property If you want To send the email As plain text
-    .TextBody = TextBody
-
-    'Set HTMLBody  property If you want To send the email As an HTML formatted
-    '.HTMLBody = TextBody
-
-    'Blind copy And attachments are optional.
-    If Len(BCC)>0 Then .BCC = BCC
-    If Len(Files)>0 Then .AddAttachment Files
-    
-    'Send the email
-    .Send
-  End With
-
-  'Returns zero If succesfull. Error code otherwise 
-  SendMailByCDO = Err.Number
 End Function
+
+ 
+
 
 %>
