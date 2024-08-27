@@ -36,6 +36,8 @@
         end if 
     end if 
 
+TotalAsistentes = 1
+TotalAsistentes_autorizados = 1
 
     pct_TotalAsistentes_autorizados   = Round( ( TotalAsistentes_autorizados * 100) / TotalAsistentes, 2)
     pct_TotalAsistentes_por_autorizar = Round( 100 - pct_TotalAsistentes_autorizados, 2)
@@ -102,22 +104,8 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
+           
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Resumen
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="administracion/inscritos/">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Inscripciones</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
@@ -126,16 +114,23 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="administracion/usuarios/">
+                <a class="nav-link collapsed" href="javascript:fnUsuarios();">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Usuarios</span>
                 </a>
             </li>
 
             <li class="nav-item">
+                <a class="nav-link collapsed" href="javascript:fnEventos();">
+                    <i class="fas fa-fw fa-bicycle"></i>
+                    <span>Eventos</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="administracion/clientes/">
                     <i class="fas fa-fw fa-globe  "></i>
-                    <span>Clientes</span>
+                    <span>Asistentes</span>
                 </a>
             </li>
 
@@ -433,6 +428,13 @@
             cutoutPercentage: 80,
           },
         });
+
+        function fnUsuarios(){
+            $("#content").load("administracion/usuarios/index.html?rnd=" + Math.random());
+        }
+        function fnEventos(){
+            $("#content").load("administracion/eventos/index.html?rnd=" + Math.random());
+        }
     </script>
 
 </body>

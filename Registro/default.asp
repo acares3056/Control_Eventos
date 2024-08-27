@@ -1,7 +1,7 @@
 ﻿<!-- #include file="../includes/server/config.asp" -->
 <!-- #include file="../includes/server/fnDB.asp" -->
 <%
-''    On Error Resume Next
+    On Error Resume Next
 
     DisableCache()
 
